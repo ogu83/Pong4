@@ -39,6 +39,8 @@ p3y = H/30
 p4x = W/2 - ((H/60)**2)/2
 p4y = H-(H/30)
 
+ball_thrower = 0 #No player is ball thrower in the first run, to get score the corresponding player should throw the ball, it is a little bit different in my game original one because of 4 play rules.
+
 #Player Scores
 p1score = 0
 p2score = 0
@@ -99,8 +101,7 @@ def uploc():
     global p2y
     
     global p3x
-    global p4x
-
+    global p4x    
 
     if w_p:
         if p1y-(dmH) < 0:
@@ -153,6 +154,8 @@ Updates Ball And Game Scores
 ''' 
 def upblnv():
 
+    global ball_thrower
+
     global bx
     global bxv
     global by
@@ -163,12 +166,30 @@ def upblnv():
     global p2score
     global p1score
     
+    '''
+    Updates score according to the last ball thrower
+    '''
+    def update_score(p1score, p2score,p3score,p4score,ball_thrower): 
+        if ball_thrower == 1:
+            p1score += 1
+        elif ball_thrower == 2:
+            p2score += 1
+        elif ball_thrower == 3:
+            p3score += 1
+        elif ball_thrower == 4:
+            p4score += 1
+
+        ball_thrower = 0 #Set Ball thrower 0 to be fair, when the corresponding player throws then begin to score it.
+
+        return p1score,p2score,p3score,p4score,ball_thrower
+    
     if (bx+bxv < p1x+paddle_width_v) and ((p1y < by+byv+bw) and (by+byv-bw < p1y+paddle_height_v)):
         bxv = -bxv
         byv = ((p1y+(p1y+paddle_height_v))/2)-by
         byv = -byv/((5*bw)/7)
+        ball_thrower = 1
     elif bx+bxv < 0:
-        p2score += 1
+        p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
         bx = W/2
         bxv = H/velocity_raito
         by = H/2
@@ -178,8 +199,9 @@ def upblnv():
         bxv = -bxv
         byv = ((p2y+(p2y+paddle_height_v))/2)-by
         byv = -byv/((5*bw)/7)
+        ball_thrower = 2
     elif bx+bxv > W:
-        p1score += 1
+        p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
         bx = W/2
         bxv = -H/velocity_raito
         by = H/2
@@ -194,8 +216,9 @@ def upblnv():
         byv = -byv
         bxv = ((p3x+(p3x+paddle_width_h))/2)-bx
         bxv = -bxv/((5*bw)/7)
+        ball_thrower = 3
     elif by+byv < 0:
-        p4score += 1
+        p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
         by = H/2
         byv = W/velocity_raito
         bx = W/2
@@ -205,8 +228,9 @@ def upblnv():
         byv = -byv
         bxv = ((p4x+(p4x+paddle_width_h))/2)-bx
         bxv = -bxv/((5*bw)/7)
+        ball_thrower = 4
     elif by+byv > H:
-        p3score += 1
+        p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
         by = H/2
         byv = -W/velocity_raito
         bx = W/2
