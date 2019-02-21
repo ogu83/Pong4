@@ -12,8 +12,7 @@ def client(ip, port, message):
         response = sock.recv(4096)
         if (message == "GameState"):
             game_state_str = response.decode('ascii')
-            game_state= gs.GameState.from_json(game_state_str)            
-        pass
+            game_state= gs.GameState.from_json(game_state_str)
     finally:
         sock.close()
 

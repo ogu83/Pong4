@@ -26,7 +26,6 @@ comic = pygame.font.SysFont('Comic Sans MS', 15)
 
 ### Variables
 wt = 10 #thread update wait time 
-mplay = False
 
 #Player Coordinates
 p1x = W/30
