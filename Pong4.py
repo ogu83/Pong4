@@ -2,24 +2,43 @@ import pygame
 
 ### Colors
 WHITE = (255, 255, 255)
+RED = (255,0,0)
+GREEN = (0,255,0)
+BLUE = (0,0,255)
+YELLOW = (255,255,0)
 BLACK = (0,0,0)
 
+#Colors of players
+py1_Color = RED
+py2_Color = GREEN
+py3_Color = BLUE
+py4_Color = YELLOW
+
 ### Constants
-W = 600
-H = 600
+W = 600 # Width of the game table
+H = W # Height of the game table Game should be a square always to be fair
+
 pygame.font.init()
 comic = pygame.font.SysFont('Comic Sans MS', 30)
 
 ### Variables
-wt = 10
+wt = 10 #thread update wait time 
 mplay = False
 
+#Player Coordinates
 p1x = W/30
 p1y = H/2 - ((W/60)**2)/2
 
 p2x = W-(W/30)
 p2y = H/2 - ((W/60)**2)/2
 
+p3x = H/30
+p3y = W/2 - ((H/60)**2)/2
+
+p4x = H-(H/30)
+p4y = W/2 - ((H/60)**2)/2
+
+#Player Scores
 p1score = 0
 p2score = 0
 p3score = 0
@@ -44,21 +63,27 @@ lrr = False
 
 dm = H/40
 
-paddle_width = W/60
-paddle_height = paddle_width**2
+#Vertical Players Paddle Size (Players which stands right and left)
+paddle_width_v = W/60
+paddle_height_v = paddle_width_v**2
+
+#Horizontal Players Paddle Size (Players which stands up and down)
+paddle_height_h = H/60
+paddle_widht_h = paddle_height_h**2
 
 bsd = 1
 
-bx = W/2
-by = H/2
-bw = W/65
-bxv = H/60
-bxv = -bxv
-byv = 0
+bx = W/2 #Ball X Position
+by = H/2 #Ball Y Position
+bw = W/65 #Ball diameter
+
+velocity_raito = 120 #Initial velocity ratio
+bxv = -H/velocity_raito # Ball X Velocity
+byv = 0 #Ball Y Velocity
 
 ### Functions
-def drawpaddle(x, y, w, h):
-    pygame.draw.rect(screen, WHITE, (x, y, w, h))
+def drawpaddle(x, y, w, h, color=WHITE):
+    pygame.draw.rect(screen, color, (x, y, w, h))
 
 def drawball(x, y):
     pygame.draw.circle(screen, WHITE, (int(x), int(y)), int(bw))
@@ -72,8 +97,8 @@ def uploc():
         else:
             p1y -= dm
     elif s_p:
-        if p1y+(dm)+paddle_height > H:
-            p1y = H-paddle_height
+        if p1y+(dm)+paddle_height_v > H:
+            p1y = H-paddle_height_v
         else:
             p1y += dm
     if u_p:
@@ -82,8 +107,8 @@ def uploc():
         else:
             p2y -= dm
     elif d_p:
-        if p2y+(dm)+paddle_height > H:
-            p2y = H-paddle_height
+        if p2y+(dm)+paddle_height_v > H:
+            p2y = H-paddle_height_v
         else:
             p2y += dm
 
@@ -92,27 +117,30 @@ def upblnv():
     global bxv
     global by
     global byv
+    global p4score
+    global p3score
     global p2score
     global p1score
 
-    if (bx+bxv < p1x+paddle_width) and ((p1y < by+byv+bw) and (by+byv-bw < p1y+paddle_height)):
+    #2 Player Mode
+    if (bx+bxv < p1x+paddle_width_v) and ((p1y < by+byv+bw) and (by+byv-bw < p1y+paddle_height_v)):
         bxv = -bxv
-        byv = ((p1y+(p1y+paddle_height))/2)-by
+        byv = ((p1y+(p1y+paddle_height_v))/2)-by
         byv = -byv/((5*bw)/7)
     elif bx+bxv < 0:
         p2score += 1
         bx = W/2
-        bxv = H/60
+        bxv = H/velocity_raito
         by = H/2
         byv = 0
-    if (bx+bxv > p2x) and ((p2y < by+byv+bw) and (by+byv-bw < p2y+paddle_height)):
+    if (bx+bxv > p2x) and ((p2y < by+byv+bw) and (by+byv-bw < p2y+paddle_height_v)):
         bxv = -bxv
-        byv = ((p2y+(p2y+paddle_height))/2)-by
+        byv = ((p2y+(p2y+paddle_height_v))/2)-by
         byv = -byv/((5*bw)/7)
     elif bx+bxv > W:
         p1score += 1
         bx = W/2
-        bxv = -H/60
+        bxv = -H/velocity_raito
         by = H/2
         byv = 0
     if by+byv > H or by+byv < 0:
@@ -122,12 +150,17 @@ def upblnv():
     by += byv
 
 def drawscore():
-    score = comic.render(str(p1score) + " - " + str(p2score), False, WHITE)
-    screen.blit(score, (W/2,30))
+    scoreStr = f"Score"
+    score = comic.render(scoreStr, False, WHITE)
+    screen.blit(score, (30,30))
+    screen.blit(comic.render(f"{p1score}",False,py1_Color),(H/5,30))
+    screen.blit(comic.render(f"{p2score}",False,py2_Color),(2*H/5,30))
+    screen.blit(comic.render(f"{p3score}",False,py3_Color),(3*H/5,30))
+    screen.blit(comic.render(f"{p4score}",False,py4_Color),(4*H/5,30))
 
 ### Initialize
 screen = pygame.display.set_mode((W, H))
-pygame.display.set_caption('Snake ML v.1.0.0')
+pygame.display.set_caption('Pong for 4 Players')
 screen.fill(BLACK)
 pygame.display.flip()
 
@@ -186,7 +219,9 @@ while running:
     upblnv()
     drawscore()
     drawball(bx, by)
-    drawpaddle(p1x, p1y, paddle_width, paddle_height)
-    drawpaddle(p2x, p2y, paddle_width, paddle_height)
+
+    drawpaddle(p1x, p1y, paddle_width_v, paddle_height_v, py1_Color) 
+    drawpaddle(p2x, p2y, paddle_width_v, paddle_height_v, py2_Color)
+
     pygame.display.flip()
     pygame.time.wait(wt)
