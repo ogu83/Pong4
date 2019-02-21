@@ -29,7 +29,7 @@ To start scoring at least one player should reflect first to be fair in 2 Player
 ### 4 Player Game
 A **RED**, **GREEN**, **BLUE** and **YELLOW** player will initiated across the screen. 
 
-* **RED** player will be on the **LEFT** and playes with **W and **S** keys
+* **RED** player will be on the **LEFT** and playes with **W** and **S** keys
 * **GREEN** player will stand on the **RIGHT** and playes with **UP** and **DOWN** keys
 * **BLUE** player will stand on the **TOP** and playes with **A** and **D** keys
 * **YELLOW** player will stand on the **BOTTOM** and playes with **LEFT** and **RIGHT** keys
