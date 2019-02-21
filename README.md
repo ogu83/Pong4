@@ -22,7 +22,7 @@ Ball will be thrown to the RED player first, if reflected by **RED** player the 
 To start scoring at least one player should reflect first to be fair in 2 Player and also in 4 Player game.
 Scoring is on the top of the screen. All scores is in the color of the player.
 
-![2 Player Pong Local](/images/2PlayerPongLocal.jpg)
+![2 Player Pong Local](https://github.com/ogu83/Pong4/blob/master/Images/2PlayerPongLocal.jpg)
 
 ### 4 Player Game
 A **RED**, **GREEN**, **BLUE** and **YELLOW** player will initiated across the screen. 
@@ -30,4 +30,4 @@ A **RED**, **GREEN**, **BLUE** and **YELLOW** player will initiated across the s
 * **BLUE** player will stand on the **TOP**
 * **YELLOW** player will stand on the **RIGHT**
 
-![4 Player Pong Local](/images/2PlayerPongLocal.jpg)
+![4 Player Pong Local](https://github.com/ogu83/Pong4/blob/master/Images/4PlayerPongLocal.jpg)
