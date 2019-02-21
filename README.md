@@ -29,10 +29,10 @@ To start scoring at least one player should reflect first to be fair in 2 Player
 ### 4 Player Game
 A **RED**, **GREEN**, **BLUE** and **YELLOW** player will initiated across the screen. 
 
-* **RED** player will be on the **LEFT**
-* **GREEN** player will stand on the **RIGHT**
-* **BLUE** player will stand on the **TOP**
-* **YELLOW** player will stand on the **BOTTOM**
+* **RED** player will be on the **LEFT** and playes with **W and **S** keys
+* **GREEN** player will stand on the **RIGHT** and playes with **UP** and **DOWN** keys
+* **BLUE** player will stand on the **TOP** and playes with **A** and **D** keys
+* **YELLOW** player will stand on the **BOTTOM** and playes with **LEFT** and **RIGHT** keys
 
 Ball will be thrown to the RED player first, if reflected by **RED** player the game will start, if not ball will be thrown to **GREEN** player.
 To start scoring at least one player should reflect first to be fair.
@@ -60,6 +60,8 @@ Then Start the clients via command
 1. Player2 `python Pong4Client.py 2`
 1. Player3 `python Pong4Client.py 3`
 1. Player4 `python Pong4Client.py 4`
+
+All Players playes with **LEFT** and **RIGHT** keys and server will move their paddle accordingly.
 
 Also in the clients **ip** and **port** values should be set if the server is customized.
 
