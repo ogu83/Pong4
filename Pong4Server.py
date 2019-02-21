@@ -2,7 +2,7 @@ import socket
 import threading
 import socketserver as SocketServer
 import pygame
-import marshal,json
+import json
 import GameState as gs
 
 if __name__ == "__main__":    
@@ -18,6 +18,45 @@ if __name__ == "__main__":
             if (data == "GameState"):
                 game_state_str = game_state.toJSON().encode('ascii')
                 self.request.sendall(game_state_str)
+            else:
+                player_name = data.split(':')[0]
+                key = data.split(':')[1]
+                if player_name == "Player1":  #RED PLAYER                 
+                    if key == "LEFT_DOWN":
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_w))
+                    elif key == "LEFT_UP":
+                        pygame.event.post(pygame.event.Event(pygame.KEYUP, key=pygame.K_w))
+                    elif key == "RIGHT_DOWN":
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_s))
+                    elif key == "RIGHT_UP":
+                        pygame.event.post(pygame.event.Event(pygame.KEYUP, key=pygame.K_s))
+                elif player_name == "Player2": #GREEN PLAYER
+                    if key == "LEFT_DOWN":
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_UP))
+                    elif key == "LEFT_UP":
+                        pygame.event.post(pygame.event.Event(pygame.KEYUP, key=pygame.K_UP))
+                    elif key == "RIGHT_DOWN":
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_DOWN))
+                    elif key == "RIGHT_UP":
+                        pygame.event.post(pygame.event.Event(pygame.KEYUP, key=pygame.K_DOWN))
+                elif player_name == "Player3": #BLUE PLAYER                   
+                    if key == "LEFT_DOWN":
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_a))
+                    elif key == "LEFT_UP":
+                        pygame.event.post(pygame.event.Event(pygame.KEYUP, key=pygame.K_a))
+                    elif key == "RIGHT_DOWN":
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_d))
+                    elif key == "RIGHT_UP":
+                        pygame.event.post(pygame.event.Event(pygame.KEYUP, key=pygame.K_d))
+                elif player_name == "Player4": #YELLOW PLAYER                   
+                    if key == "LEFT_DOWN":
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_LEFT))
+                    elif key == "LEFT_UP":
+                        pygame.event.post(pygame.event.Event(pygame.KEYUP, key=pygame.K_LEFT))
+                    elif key == "RIGHT_DOWN":
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_RIGHT))
+                    elif key == "RIGHT_UP":
+                        pygame.event.post(pygame.event.Event(pygame.KEYUP, key=pygame.K_RIGHT))
 
     class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
         pass
@@ -35,7 +74,6 @@ if __name__ == "__main__":
     server_thread.start()
     print("Pong 4 server loop running in thread:", server_thread.name)  
     
-
     ####GAME####
 
     ### Colors
@@ -349,7 +387,7 @@ screen = pygame.display.set_mode((game_state.W, game_state.H))
 playerCount = 2
 if game_state.FourPlayers:
     playerCount = 4   
-pygame.display.set_caption(f'Pong for {playerCount} Players')
+pygame.display.set_caption(f'Pong Server for {playerCount} Players')
 
 screen.fill(BLACK)
 pygame.display.flip()

@@ -382,6 +382,7 @@ while running:
                         left_p = True
                         lrr = False
 
+
     screen.fill(BLACK)
     uploc()
     upblnv()

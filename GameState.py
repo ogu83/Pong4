@@ -22,6 +22,31 @@ class GameState(object):
         self.H = H
         self.W = W
         self.FourPlayers = FourPlayers
+        self.p1x = p1x
+        self.p1y = p1y
+        self.p2x = p2x
+        self.p2y = p2y
+        self.p3x = p3x
+        self.p3y = p3y
+        self.p4x = p4x
+        self.p4y = p4y
+        self.ball_thrower=ball_thrower
+        self.p1score=p1score
+        self.p2score=p2score
+        self.p3score=p3score
+        self.p4score=p4score
+        self.dmH=dmH
+        self.dmW=dmW
+        self.paddle_width_v=paddle_width_v
+        self.paddle_width_h=paddle_width_h
+        self.paddle_height_v=paddle_height_v
+        self.paddle_height_h=paddle_height_h
+        self.bx=bx
+        self.by=by
+        self.bw=bw
+        self.velocity_raito=velocity_raito
+        self.bxv=bxv
+        self.byv=byv
 
     @classmethod
     def from_json(cls, json_str):
