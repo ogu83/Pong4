@@ -42,8 +42,6 @@ The last ball thrower gets the score, whereever side of the screen the ball fall
 
 Scoring is on the top of the screen. All scores is in the color of the player.
 
-### ENJOY THE GAME.
-
 ## Pong4Server.py
 Multiplayer Pong4 on Network
 
@@ -68,6 +66,6 @@ Also in the clients **ip** and **port** values should be set if the server is cu
 The defaults are
 ```python
 ip, port = socket.gethostname(), 9009
-```python
+```
 
 ### ENJOY THE GAME.
