@@ -2,6 +2,7 @@ import socket
 import json
 import pygame
 import GameState as gs
+import sys
 
 global global_game_state 
 global_game_state = gs.GameState()
@@ -30,7 +31,10 @@ Player2 = GREEN PLayer
 Player3 = BLUE Player
 Player4 = YELLOW Player
 '''
-Player = "Player2"
+Player = "Player1"
+
+if len(sys.argv)>1:
+    Player = f"Player{sys.argv[1]}"
 
 def client(ip, port, message, onInit=True, screen=None, font=None):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

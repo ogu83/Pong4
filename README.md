@@ -45,3 +45,29 @@ Scoring is on the top of the screen. All scores is in the color of the player.
 ### ENJOY THE GAME.
 
 ## Pong4Server.py
+Multiplayer Pong4 on Network
+
+First Start The Pong4 Server
+```python
+python Pong4Server.py
+```python
+
+* if `FourPlayers = True` is set game will initiate four player game play 
+* if `FourPlayers = False` is set game will initiate two player game play 
+
+Default Host and Port are localhost and 9009, to customize set the values **HOST** and **PORT**
+
+Then Start the clients via command
+1. Player1 `python Pong4Client.py 1`
+1. Player2 `python Pong4Client.py 2`
+1. Player3 `python Pong4Client.py 3`
+1. Player4 `python Pong4Client.py 4`
+
+Also in the clients **ip** and **port** values should be set if the server is customized.
+
+The defaults are
+```python
+ip, port = socket.gethostname(), 9009
+```python
+
+### ENJOY THE GAME.
