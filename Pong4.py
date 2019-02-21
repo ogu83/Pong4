@@ -16,10 +16,10 @@ py4_Color = YELLOW
 
 ### Constants
 W = 600 # Width of the game table
-H = W # Height of the game table Game should be a square always to be fair
+H = W # Height of the game table Game should be a square always to be fair for 4 player game
 
 pygame.font.init()
-comic = pygame.font.SysFont('Comic Sans MS', 30)
+comic = pygame.font.SysFont('Comic Sans MS', 15)
 
 ### Variables
 wt = 10 #thread update wait time 
@@ -32,11 +32,11 @@ p1y = H/2 - ((W/60)**2)/2
 p2x = W-(W/30)
 p2y = H/2 - ((W/60)**2)/2
 
-p3x = H/30
-p3y = W/2 - ((H/60)**2)/2
+p3x = W/2 - ((H/60)**2)/2
+p3y = H/30
 
-p4x = H-(H/30)
-p4y = W/2 - ((H/60)**2)/2
+p4x = W/2 - ((H/60)**2)/2
+p4y = H-(H/30)
 
 #Player Scores
 p1score = 0
@@ -49,19 +49,20 @@ w_p = False
 s_p = False
 wsr = False
 # Up-Down Key Params
-u_p = False
-d_p = False
+up_p = False
+down_p = False
 udr = False
 # A-D Key Params
 a_p = False
 d_p = False
 adr = False
 # Left-Right Key Params
-l_p = False
-r_p = False
+left_p = False
+right_p = False
 lrr = False
 
-dm = H/40
+dmH = H/40
+dmW = W/40
 
 #Vertical Players Paddle Size (Players which stands right and left)
 paddle_width_v = W/60
@@ -69,7 +70,7 @@ paddle_height_v = paddle_width_v**2
 
 #Horizontal Players Paddle Size (Players which stands up and down)
 paddle_height_h = H/60
-paddle_widht_h = paddle_height_h**2
+paddle_width_h = paddle_height_h**2
 
 bsd = 1
 
@@ -77,7 +78,7 @@ bx = W/2 #Ball X Position
 by = H/2 #Ball Y Position
 bw = W/65 #Ball diameter
 
-velocity_raito = 120 #Initial velocity ratio
+velocity_raito = 240 #Initial velocity ratio (bigger makes the game slower, smaller makes the game faster)
 bxv = -H/velocity_raito # Ball X Velocity
 byv = 0 #Ball Y Velocity
 
@@ -88,35 +89,73 @@ def drawpaddle(x, y, w, h, color=WHITE):
 def drawball(x, y):
     pygame.draw.circle(screen, WHITE, (int(x), int(y)), int(bw))
 
+''' 
+Updates Player Locations
+''' 
 def uploc():
     global p1y
     global p2y
+    
+    global p3x
+    global p4x
+
+
     if w_p:
-        if p1y-(dm) < 0:
+        if p1y-(dmH) < 0:
             py1 = 0
         else:
-            p1y -= dm
+            p1y -= dmH
     elif s_p:
-        if p1y+(dm)+paddle_height_v > H:
+        if p1y+(dmH)+paddle_height_v > H:
             p1y = H-paddle_height_v
         else:
-            p1y += dm
-    if u_p:
-        if p2y-(dm) < 0:
+            p1y += dmH
+
+    if up_p:
+        if p2y-(dmH) < 0:
             p2y = 0
         else:
-            p2y -= dm
-    elif d_p:
-        if p2y+(dm)+paddle_height_v > H:
+            p2y -= dmH
+    elif down_p:
+        if p2y+(dmH)+paddle_height_v > H:
             p2y = H-paddle_height_v
         else:
-            p2y += dm
+            p2y += dmH
 
+
+    if a_p:
+        if p3x-(dmW)<0:
+            p3x = 0
+        else:
+            p3x -=dmW
+    elif d_p:
+        if p3x+(dmW)+paddle_width_h>W:
+            p3x = W-paddle_width_h
+        else:
+            p3x += dmW
+
+    if left_p:
+        if p4x-(dmW)<0:
+            p4x = 0
+        else:
+            p4x -=dmW
+    elif right_p:
+        if p4x+(dmW)+paddle_width_h>W:
+            p4x = W-paddle_width_h
+        else:
+            p4x += dmW
+
+ 
+''' 
+Updates Ball And Game Scores
+''' 
 def upblnv():
+
     global bx
     global bxv
     global by
     global byv
+
     global p4score
     global p3score
     global p2score
@@ -133,6 +172,7 @@ def upblnv():
         bxv = H/velocity_raito
         by = H/2
         byv = 0
+
     if (bx+bxv > p2x) and ((p2y < by+byv+bw) and (by+byv-bw < p2y+paddle_height_v)):
         bxv = -bxv
         byv = ((p2y+(p2y+paddle_height_v))/2)-by
@@ -143,16 +183,15 @@ def upblnv():
         bxv = -H/velocity_raito
         by = H/2
         byv = 0
+
     if by+byv > H or by+byv < 0:
         byv = -byv
 
     bx += bxv
     by += byv
 
-def drawscore():
-    scoreStr = f"Score"
-    score = comic.render(scoreStr, False, WHITE)
-    screen.blit(score, (30,30))
+def drawscore():    
+    screen.blit(comic.render("Score", False, WHITE), (30,30))
     screen.blit(comic.render(f"{p1score}",False,py1_Color),(H/5,30))
     screen.blit(comic.render(f"{p2score}",False,py2_Color),(2*H/5,30))
     screen.blit(comic.render(f"{p3score}",False,py3_Color),(3*H/5,30))
@@ -183,15 +222,36 @@ while running:
                     w_p = False
                     wsr = True
             if event.key == pygame.K_UP:
-                u_p = True
-                if d_p == True:
-                    d_p = False
+                up_p = True
+                if down_p == True:
+                    down_p = False
                     udr = True
             if event.key == pygame.K_DOWN:
-                d_p = True
-                if u_p == True:
-                    u_p = False
+                down_p = True
+                if up_p == True:
+                    up_p = False
                     udr = True
+            if event.key == pygame.K_a:
+                a_p = True
+                if d_p == True:
+                    a_p = False
+                    adr = True
+            if event.key == pygame.K_d:
+                d_p = True
+                if a_p == True:
+                    d_p = False
+                    adr = True
+            if event.key == pygame.K_LEFT:
+                left_p = True
+                if right_p == True:
+                    left_p = False
+                    lrr = True
+            if event.key == pygame.K_RIGHT:
+                right_p = True
+                if left_p == True:
+                    right_p = False
+                    lrr = True
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
                 w_p = False
@@ -204,15 +264,35 @@ while running:
                     w_p = True
                     wsr = False
             if event.key == pygame.K_UP:
-                u_p = False
+                up_p = False
                 if udr == True:
-                    d_p = True
+                    down_p = True
                     udr = False
             if event.key == pygame.K_DOWN:
-                d_p = False
+                down_p = False
                 if udr == True:
-                    u_p = True
+                    up_p = True
                     udr = False
+            if event.key == pygame.K_a:
+                a_p = False
+                if adr == True:
+                    d_p = True
+                    adr = False
+            if event.key == pygame.K_d:
+                d_p = False
+                if adr == True:
+                    a_p = True
+                    adr = False
+            if event.key == pygame.K_LEFT:
+                left_p = False
+                if lrr == True:
+                    right_p = True
+                    lrr = False
+            if event.key == pygame.K_RIGHT:
+                right_p = False
+                if lrr == True:
+                    left_p = True
+                    lrr = False
 
     screen.fill(BLACK)
     uploc()
@@ -222,6 +302,8 @@ while running:
 
     drawpaddle(p1x, p1y, paddle_width_v, paddle_height_v, py1_Color) 
     drawpaddle(p2x, p2y, paddle_width_v, paddle_height_v, py2_Color)
+    drawpaddle(p3x, p3y, paddle_width_h, paddle_height_h, py3_Color)
+    drawpaddle(p4x, p4y, paddle_width_h, paddle_height_h, py4_Color)
 
     pygame.display.flip()
     pygame.time.wait(wt)
