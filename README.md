@@ -42,6 +42,6 @@ The last ball thrower gets the score, whereever side of the screen the ball fall
 
 Scoring is on the top of the screen. All scores is in the color of the player.
 
-###ENJOY THE GAME.
+### ENJOY THE GAME.
 
-## Pong4Network.py
+## Pong4Server.py
