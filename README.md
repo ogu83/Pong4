@@ -17,17 +17,31 @@ This is 2 or 4 player Pong game with single local computer and keyboard
 
 ### 2 Player Game
 A **RED** and a **GREEN** player will initiated across the screen. 
-**RED** player will be on the **LEFT**, **GREEN** player will stand on the **RIGHT**.
+
+* **RED** player will be on the **LEFT**
+* **GREEN** player will stand on the **RIGHT**
+
 Ball will be thrown to the RED player first, if reflected by **RED** player the game will start, if not ball will be thrown to **GREEN** player.
 To start scoring at least one player should reflect first to be fair in 2 Player and also in 4 Player game.
-Scoring is on the top of the screen. All scores is in the color of the player.
 
 ![2 Player Pong Local](https://github.com/ogu83/Pong4/blob/master/Images/2PlayerPongLocal.jpg)
 
 ### 4 Player Game
 A **RED**, **GREEN**, **BLUE** and **YELLOW** player will initiated across the screen. 
+
 * **RED** player will be on the **LEFT**
+* **GREEN** player will stand on the **RIGHT**
 * **BLUE** player will stand on the **TOP**
-* **YELLOW** player will stand on the **RIGHT**
+* **YELLOW** player will stand on the **BOTTOM**
+
+Ball will be thrown to the RED player first, if reflected by **RED** player the game will start, if not ball will be thrown to **GREEN** player.
+To start scoring at least one player should reflect first to be fair.
+The last ball thrower gets the score, whereever side of the screen the ball fall of, and has the right to first throw the ball in the next cycle.
 
 ![4 Player Pong Local](https://github.com/ogu83/Pong4/blob/master/Images/4PlayerPongLocal.jpg)
+
+Scoring is on the top of the screen. All scores is in the color of the player.
+
+###ENJOY THE GAME.
+
+## Pong4Network.py
