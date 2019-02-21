@@ -50,7 +50,7 @@ Multiplayer Pong4 on Network
 First Start The Pong4 Server
 ```python
 python Pong4Server.py
-```python
+```
 
 * if `FourPlayers = True` is set game will initiate four player game play 
 * if `FourPlayers = False` is set game will initiate two player game play 
