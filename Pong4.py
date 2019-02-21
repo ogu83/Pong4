@@ -18,6 +18,8 @@ py4_Color = YELLOW
 W = 600 # Width of the game table
 H = W # Height of the game table Game should be a square always to be fair for 4 player game
 
+FourPlayers = True ## 2 Players or 4 Players mode
+
 ### PY GAME FONT
 pygame.font.init()
 comic = pygame.font.SysFont('Comic Sans MS', 15)
@@ -33,19 +35,22 @@ p1y = H/2 - ((W/60)**2)/2
 p2x = W-(W/30)
 p2y = H/2 - ((W/60)**2)/2
 
-p3x = W/2 - ((H/60)**2)/2
-p3y = H/30
+if FourPlayers:
+    p3x = W/2 - ((H/60)**2)/2
+    p3y = H/30
 
-p4x = W/2 - ((H/60)**2)/2
-p4y = H-(H/30)
+    p4x = W/2 - ((H/60)**2)/2
+    p4y = H-(H/30)
 
 ball_thrower = 0 #No player is ball thrower in the first run, to get score the corresponding player should throw the ball, it is a little bit different in my game original one because of 4 play rules.
 
 #Player Scores
 p1score = 0
 p2score = 0
-p3score = 0
-p4score = 0 
+
+if FourPlayers:
+    p3score = 0
+    p4score = 0 
 
 # W-S Key Params
 w_p = False
@@ -55,14 +60,16 @@ wsr = False
 up_p = False
 down_p = False
 udr = False
-# A-D Key Params
-a_p = False
-d_p = False
-adr = False
-# Left-Right Key Params
-left_p = False
-right_p = False
-lrr = False
+
+if FourPlayers:
+    # A-D Key Params
+    a_p = False
+    d_p = False
+    adr = False
+    # Left-Right Key Params
+    left_p = False
+    right_p = False
+    lrr = False
 
 ##Screen Margins for Paddles
 dmH = H/40
@@ -100,8 +107,9 @@ def uploc():
     global p1y
     global p2y
     
-    global p3x
-    global p4x    
+    if FourPlayers:
+        global p3x
+        global p4x    
 
     if w_p:
         if p1y-(dmH) < 0:
@@ -125,28 +133,28 @@ def uploc():
         else:
             p2y += dmH
 
+    if FourPlayers:
+        if a_p:
+            if p3x-(dmW)<0:
+                p3x = 0
+            else:
+                p3x -=dmW
+        elif d_p:
+            if p3x+(dmW)+paddle_width_h>W:
+                p3x = W-paddle_width_h
+            else:
+                p3x += dmW
 
-    if a_p:
-        if p3x-(dmW)<0:
-            p3x = 0
-        else:
-            p3x -=dmW
-    elif d_p:
-        if p3x+(dmW)+paddle_width_h>W:
-            p3x = W-paddle_width_h
-        else:
-            p3x += dmW
-
-    if left_p:
-        if p4x-(dmW)<0:
-            p4x = 0
-        else:
-            p4x -=dmW
-    elif right_p:
-        if p4x+(dmW)+paddle_width_h>W:
-            p4x = W-paddle_width_h
-        else:
-            p4x += dmW
+        if left_p:
+            if p4x-(dmW)<0:
+                p4x = 0
+            else:
+                p4x -=dmW
+        elif right_p:
+            if p4x+(dmW)+paddle_width_h>W:
+                p4x = W-paddle_width_h
+            else:
+                p4x += dmW
 
  
 ''' 
@@ -161,27 +169,40 @@ def upblnv():
     global by
     global byv
 
-    global p4score
-    global p3score
+    if FourPlayers:
+        global p4score
+        global p3score
+
     global p2score
     global p1score
     
     '''
     Updates score according to the last ball thrower
     '''
-    def update_score(p1score, p2score,p3score,p4score,ball_thrower): 
-        if ball_thrower == 1:
-            p1score += 1
-        elif ball_thrower == 2:
-            p2score += 1
-        elif ball_thrower == 3:
-            p3score += 1
-        elif ball_thrower == 4:
-            p4score += 1
+    if FourPlayers:
+        def update_score(p1score, p2score,p3score,p4score,ball_thrower): 
+            if ball_thrower == 1:
+                p1score += 1
+            elif ball_thrower == 2:
+                p2score += 1
+            elif ball_thrower == 3:
+                p3score += 1
+            elif ball_thrower == 4:
+                p4score += 1
 
-        ball_thrower = 0 #Set Ball thrower 0 to be fair, when the corresponding player throws then begin to score it.
+            ball_thrower = 0 #Set Ball thrower 0 to be fair, when the corresponding player throws then begin to score it.
 
-        return p1score,p2score,p3score,p4score,ball_thrower
+            return p1score,p2score,p3score,p4score,ball_thrower
+    else:
+        def update_score(p1score, p2score,ball_thrower): 
+            if ball_thrower == 1:
+                p1score += 1
+            elif ball_thrower == 2:
+                p2score += 1            
+
+            ball_thrower = 0 #Set Ball thrower 0 to be fair, when the corresponding player throws then begin to score it.
+
+            return p1score,p2score,ball_thrower
     
     if (bx+bxv < p1x+paddle_width_v) and ((p1y < by+byv+bw) and (by+byv-bw < p1y+paddle_height_v)):
         bxv = -bxv
@@ -189,7 +210,11 @@ def upblnv():
         byv = -byv/((5*bw)/7)
         ball_thrower = 1
     elif bx+bxv < 0:
-        p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
+        if FourPlayers:
+            p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
+        else:
+            p1score,p2score,ball_thrower = update_score(p1score,p2score,ball_thrower)
+
         bx = W/2
         bxv = H/velocity_raito
         by = H/2
@@ -201,54 +226,65 @@ def upblnv():
         byv = -byv/((5*bw)/7)
         ball_thrower = 2
     elif bx+bxv > W:
-        p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
+        if FourPlayers:
+            p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
+        else:
+            p1score,p2score,ball_thrower = update_score(p1score,p2score,ball_thrower)
         bx = W/2
         bxv = -H/velocity_raito
         by = H/2
         byv = 0
 
-    ##2 Player Mode
-    #if by+byv > H or by+byv < 0:
-    #    byv = -byv
+    
+    if FourPlayers:##4 Player Mode        
+        if (by+byv < p3y+paddle_height_h) and ((p3x < bx+bxv+bw) and (bx+bxv-bw < p3x+paddle_width_h)):
+            byv = -byv
+            bxv = ((p3x+(p3x+paddle_width_h))/2)-bx
+            bxv = -bxv/((5*bw)/7)
+            ball_thrower = 3
+        elif by+byv < 0:
+            p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
+            by = H/2
+            byv = W/velocity_raito
+            bx = W/2
+            bxv = 0
 
-    ##4 Player Mode
-    if (by+byv < p3y+paddle_height_h) and ((p3x < bx+bxv+bw) and (bx+bxv-bw < p3x+paddle_width_h)):
-        byv = -byv
-        bxv = ((p3x+(p3x+paddle_width_h))/2)-bx
-        bxv = -bxv/((5*bw)/7)
-        ball_thrower = 3
-    elif by+byv < 0:
-        p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
-        by = H/2
-        byv = W/velocity_raito
-        bx = W/2
-        bxv = 0
-
-    if (by+byv > p4y) and ((p4x < bx+bxv+bw) and (bx+bxv-bw < p4x+paddle_width_h)):
-        byv = -byv
-        bxv = ((p4x+(p4x+paddle_width_h))/2)-bx
-        bxv = -bxv/((5*bw)/7)
-        ball_thrower = 4
-    elif by+byv > H:
-        p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
-        by = H/2
-        byv = -W/velocity_raito
-        bx = W/2
-        bxv = 0
+        if (by+byv > p4y) and ((p4x < bx+bxv+bw) and (bx+bxv-bw < p4x+paddle_width_h)):
+            byv = -byv
+            bxv = ((p4x+(p4x+paddle_width_h))/2)-bx
+            bxv = -bxv/((5*bw)/7)
+            ball_thrower = 4
+        elif by+byv > H:
+            p1score,p2score,p3score,p4score,ball_thrower = update_score(p1score,p2score,p3score,p4score,ball_thrower)
+            by = H/2
+            byv = -W/velocity_raito
+            bx = W/2
+            bxv = 0
+    else:##2 Player Mode    
+        if by+byv > H or by+byv < 0:
+            byv = -byv
         
     bx += bxv
     by += byv
 
 def drawscore():    
     screen.blit(comic.render("Score", False, WHITE), (30,30))
+    
     screen.blit(comic.render(f"{p1score}",False,py1_Color),(H/5,30))
     screen.blit(comic.render(f"{p2score}",False,py2_Color),(2*H/5,30))
-    screen.blit(comic.render(f"{p3score}",False,py3_Color),(3*H/5,30))
-    screen.blit(comic.render(f"{p4score}",False,py4_Color),(4*H/5,30))
+    
+    if FourPlayers:
+        screen.blit(comic.render(f"{p3score}",False,py3_Color),(3*H/5,30))
+        screen.blit(comic.render(f"{p4score}",False,py4_Color),(4*H/5,30))
 
 ### Initialize
 screen = pygame.display.set_mode((W, H))
-pygame.display.set_caption('Pong for 4 Players')
+
+playerCount = 2
+if FourPlayers:
+    playerCount = 4   
+pygame.display.set_caption(f'Pong for {playerCount} Players')
+
 screen.fill(BLACK)
 pygame.display.flip()
 
@@ -280,26 +316,28 @@ while running:
                 if up_p == True:
                     up_p = False
                     udr = True
-            if event.key == pygame.K_a:
-                a_p = True
-                if d_p == True:
-                    a_p = False
-                    adr = True
-            if event.key == pygame.K_d:
-                d_p = True
-                if a_p == True:
-                    d_p = False
-                    adr = True
-            if event.key == pygame.K_LEFT:
-                left_p = True
-                if right_p == True:
-                    left_p = False
-                    lrr = True
-            if event.key == pygame.K_RIGHT:
-                right_p = True
-                if left_p == True:
-                    right_p = False
-                    lrr = True
+
+            if FourPlayers:
+                if event.key == pygame.K_a:
+                    a_p = True
+                    if d_p == True:
+                        a_p = False
+                        adr = True
+                if event.key == pygame.K_d:
+                    d_p = True
+                    if a_p == True:
+                        d_p = False
+                        adr = True
+                if event.key == pygame.K_LEFT:
+                    left_p = True
+                    if right_p == True:
+                        left_p = False
+                        lrr = True
+                if event.key == pygame.K_RIGHT:
+                    right_p = True
+                    if left_p == True:
+                        right_p = False
+                        lrr = True
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
@@ -322,26 +360,28 @@ while running:
                 if udr == True:
                     up_p = True
                     udr = False
-            if event.key == pygame.K_a:
-                a_p = False
-                if adr == True:
-                    d_p = True
-                    adr = False
-            if event.key == pygame.K_d:
-                d_p = False
-                if adr == True:
-                    a_p = True
-                    adr = False
-            if event.key == pygame.K_LEFT:
-                left_p = False
-                if lrr == True:
-                    right_p = True
-                    lrr = False
-            if event.key == pygame.K_RIGHT:
-                right_p = False
-                if lrr == True:
-                    left_p = True
-                    lrr = False
+
+            if FourPlayers:
+                if event.key == pygame.K_a:
+                    a_p = False
+                    if adr == True:
+                        d_p = True
+                        adr = False
+                if event.key == pygame.K_d:
+                    d_p = False
+                    if adr == True:
+                        a_p = True
+                        adr = False
+                if event.key == pygame.K_LEFT:
+                    left_p = False
+                    if lrr == True:
+                        right_p = True
+                        lrr = False
+                if event.key == pygame.K_RIGHT:
+                    right_p = False
+                    if lrr == True:
+                        left_p = True
+                        lrr = False
 
     screen.fill(BLACK)
     uploc()
@@ -351,8 +391,10 @@ while running:
 
     drawpaddle(p1x, p1y, paddle_width_v, paddle_height_v, py1_Color) 
     drawpaddle(p2x, p2y, paddle_width_v, paddle_height_v, py2_Color)
-    drawpaddle(p3x, p3y, paddle_width_h, paddle_height_h, py3_Color)
-    drawpaddle(p4x, p4y, paddle_width_h, paddle_height_h, py4_Color)
+
+    if FourPlayers:
+        drawpaddle(p3x, p3y, paddle_width_h, paddle_height_h, py3_Color)
+        drawpaddle(p4x, p4y, paddle_width_h, paddle_height_h, py4_Color)
 
     pygame.display.flip()
     pygame.time.wait(wt)
