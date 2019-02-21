@@ -18,6 +18,7 @@ py4_Color = YELLOW
 W = 600 # Width of the game table
 H = W # Height of the game table Game should be a square always to be fair for 4 player game
 
+### PY GAME FONT
 pygame.font.init()
 comic = pygame.font.SysFont('Comic Sans MS', 15)
 
@@ -61,6 +62,7 @@ left_p = False
 right_p = False
 lrr = False
 
+##Screen Margins for Paddles
 dmH = H/40
 dmW = W/40
 
@@ -72,12 +74,12 @@ paddle_height_v = paddle_width_v**2
 paddle_height_h = H/60
 paddle_width_h = paddle_height_h**2
 
-bsd = 1
-
+## Ball Geometry
 bx = W/2 #Ball X Position
 by = H/2 #Ball Y Position
 bw = W/65 #Ball diameter
 
+## Ball Velocity 
 velocity_raito = 240 #Initial velocity ratio (bigger makes the game slower, smaller makes the game faster)
 bxv = -H/velocity_raito # Ball X Velocity
 byv = 0 #Ball Y Velocity
@@ -160,8 +162,7 @@ def upblnv():
     global p3score
     global p2score
     global p1score
-
-    #2 Player Mode
+    
     if (bx+bxv < p1x+paddle_width_v) and ((p1y < by+byv+bw) and (by+byv-bw < p1y+paddle_height_v)):
         bxv = -bxv
         byv = ((p1y+(p1y+paddle_height_v))/2)-by
@@ -184,9 +185,33 @@ def upblnv():
         by = H/2
         byv = 0
 
-    if by+byv > H or by+byv < 0:
-        byv = -byv
+    ##2 Player Mode
+    #if by+byv > H or by+byv < 0:
+    #    byv = -byv
 
+    ##4 Player Mode
+    if (by+byv < p3y+paddle_height_h) and ((p3x < bx+bxv+bw) and (bx+bxv-bw < p3x+paddle_width_h)):
+        byv = -byv
+        bxv = ((p3x+(p3x+paddle_width_h))/2)-bx
+        bxv = -bxv/((5*bw)/7)
+    elif by+byv < 0:
+        p4score += 1
+        by = H/2
+        byv = W/velocity_raito
+        bx = W/2
+        bxv = 0
+
+    if (by+byv > p4y) and ((p4x < bx+bxv+bw) and (bx+bxv-bw < p4x+paddle_width_h)):
+        byv = -byv
+        bxv = ((p4x+(p4x+paddle_width_h))/2)-bx
+        bxv = -bxv/((5*bw)/7)
+    elif by+byv > H:
+        p3score += 1
+        by = H/2
+        byv = -W/velocity_raito
+        bx = W/2
+        bxv = 0
+        
     bx += bxv
     by += byv
 
